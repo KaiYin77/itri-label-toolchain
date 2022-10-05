@@ -1,0 +1,9 @@
+<launch>
+	<node 
+	  name="top_vls128_pcd_saver" 
+	  pkg="pcl_ros" 
+	  type="bag_to_pcd" 
+	  args="/itri-label-toolchain/src/data/2022-08-17-16-10-32_13.bag \
+		/velodyne/top_vls128 \
+		/itri-label-toolchain/src/data/lidar" />
+</launch>
