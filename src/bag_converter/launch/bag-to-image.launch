@@ -9,13 +9,13 @@
 	  pkg="itri-label-toolchain" 
 	  type="ros_image_saver.py" 
 	  args="--topic /lucid_cameras_x00/gige_30_f_hdr/h265/rgb8 \
-		--save_dir /itri-label-toolchain/src/data" />
+		--save_dir /itri-label-toolchain/src/data/camera" />
 	<node 
 	  name="gige_60_f_hdr_image_saver" 
 	  pkg="itri-label-toolchain" 
 	  type="ros_image_saver.py" 
 	  args="--topic /lucid_cameras_x00/gige_60_f_hdr/h265/rgb8 \
-		--save_dir /itri-label-toolchain/src/data" />
+		--save_dir /itri-label-toolchain/src/data/camera" />
 
 
 </launch>
