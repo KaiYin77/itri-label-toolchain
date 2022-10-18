@@ -1,2 +1,2 @@
 # itri-label-toolcahin
-Toolchain supporting for ITRI data to SUSTECH format
+Toolchain supports the conversion from ITRI data format to SUSTECH labelling format
