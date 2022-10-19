@@ -1,5 +1,6 @@
 <launch>
     <arg name="bags"/>
+    <arg name="bags_dir" value="/sdc/ros/src/itri/itri-label-toolchain/src/data/raw"/>
     <arg name="use_cuda_image" default="false"/>
 
     <rosparam param="/use_sim_time">
@@ -11,14 +12,13 @@
     <rosparam command="load" file="$(env SDC_CONFIG_DIR)/parameters.yaml"/>
     <include file="$(env SDC_CONFIG_DIR)/static_tf.launch"/>
     <include file="$(env SDC_CONFIG_DIR)/camera_lidar_static_tf.launch"/>
-    <include file="$(env SDC_CONFIG_DIR)/radar_lidar_static_tf.launch"/>
 
 	<node name="get_tf_static_from_rosbag" pkg="rosbag" type="play"
         args="
             --clock
             --topics
                 /tf_static
-            --bags $(arg bags)
+            --bags $(arg bags_dir)/$(arg bags)
             --duration 1
         "/>
 
@@ -40,10 +40,12 @@
 		/trackers
 		/top_detection_objects
 		/top_lidar_points
-            --bags $(arg bags)
+            --bags $(arg bags_dir)/$(arg bags)
             --start 0
             --rate 0.1
         "/>
+    <node pkg="rosbag" type="record" name="rosbag_decode_filter"
+	args="record -O $(arg bags_dir)/decode_filter_$(arg bags) /tf /lucid_cameras_x00/gige_30_f_hdr/h265/rgb8 /lucid_cameras_x00/gige_60_f_hdr/h265/rgb8 /center_track/lucid_cameras_x00/gige_30_f_hdr/rviz /center_track/lucid_cameras_x00/gige_30_f_hdr/vision_objects /center_track/lucid_cameras_x00/gige_60_f_hdr/rviz /center_track/lucid_cameras_x00/gige_60_f_hdr/vision_objects /detected_objects /clock /velodyne/top_vls128 /trackers /top_detection_objects /top_lidar_points"/>
 
     <include file="$(env SDC_CONFIG_DIR)/video_capturing/launch/cuda-image-transform.launch"
         if="$(arg use_cuda_image)">

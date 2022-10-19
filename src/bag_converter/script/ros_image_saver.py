@@ -3,6 +3,7 @@
 from sensor_msgs.msg import Image
 from cv_bridge import CvBridge, CvBridgeError
 import rospy
+import rosbag
 import cv2
 import argparse
 import os
@@ -11,6 +12,12 @@ import os
 Argparser
 '''
 parser = argparse.ArgumentParser()
+parser.add_argument(
+        "--bag",
+        help="specify rosbag name", 
+        type=str,
+        required=True,
+        )
 parser.add_argument(
         "--topic",
         help="specify ros topic", 
@@ -34,7 +41,6 @@ class ImageSubscriber(object):
     def __init__(self, topic="", save_dir=""):
         self.topic = topic
         self.save_dir = save_dir
-        rospy.Subscriber(topic, Image, self.callback)
 
     def callback(self, msg):
         rospy.loginfo('Received image and Saving ...')
@@ -51,14 +57,10 @@ class ImageSubscriber(object):
                 os.makedirs(image_dir)
             image_name = str(msg.header.stamp.secs) + '.' + str(msg.header.stamp.nsecs) + '.png'
             image_path = os.path.join(image_dir, image_name)
+            print(image_path)
             cv2.imwrite(image_path, cv2_img)
 
 def init():
-    '''
-    init node
-    '''
-    rospy.init_node('rosbag_2_image_listener')
-    
     '''
     Subscriber
     '''
@@ -70,9 +72,17 @@ def init():
             )
     
     '''
+    Load bag
+    '''
+    bag_file = '../../data/raw/' + args.bag
+    ros_bag = rosbag.Bag(bag_file)
+
+    '''
     Looping
     '''
-    rospy.spin()
+    for topic, msg, t in ros_bag.read_messages(topics=[target_topic]):
+        sub.callback(msg)
+    ros_bag.close()
 
 if __name__ == '__main__':
     init()
