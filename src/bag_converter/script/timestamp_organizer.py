@@ -5,7 +5,6 @@ from pathlib import Path
 import shutil
 
 import numpy as np
-import pandas as pd
 
 import argparse
 import configparser
